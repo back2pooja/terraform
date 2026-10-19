@@ -80,6 +80,43 @@ resource "aws_alb_listener" "https" {
 }
 
 resource "aws_alb_listener_rule" "test-query-string" {
-  listener_arn = ""
+  listener_arn = aws_alb_listener.https.arn
+  priority =  1
+
+  action {
+    order = 1
+    target_group_arn = aws_alb_target_group.blue_https_ingress.arn
+    type = "forward"
+  }
+
+  condition {
+
+    query_string {
+      key = "cluster"
+      value = "test-cluster"
+    }
+  }
 }
+
+resource "aws_alb_listener_rule" "komiko" {
+  listener_arn = aws_alb_listener.https.arn
+  priority = 3
+
+  action {
+    order = 1
+    target_group_arn = aws_alb_target_group.blue_https_ingress.arn
+    type = "forward"
+  }
+
+  condition {
+    host_header {
+      values = [
+        "komiko.dev.ddp.sbi.com"
+      ]
+    }
+  }
+}
+
+
+
 
