@@ -118,7 +118,7 @@ resource "aws_alb_listener_rule" "komiko" {
 }
 
 
-resource "aws_alb_listener_rule" "paprika" {
+resource "aws_alb_listener_rule" "homeloan" {
   listener_arn = aws_alb_listener.https.arn
   priority = 4
 
@@ -137,7 +137,7 @@ resource "aws_alb_listener_rule" "paprika" {
 }
 
 
-resource "aws_alb_listener_rule" "recipient" {
+resource "aws_alb_listener_rule" "carloan" {
   listener_arn = aws_alb_listener.https.arn
   priority = 5
 
@@ -155,6 +155,24 @@ resource "aws_alb_listener_rule" "recipient" {
     }
   }
 
+}
+
+resource "aws_alb_listener_rule" "carloan2" {
+  listener_arn = aws_alb_listener.https.arn
+  priority = 6
+
+  action {
+    order = 1
+    target_group_arn = aws_alb_target_group.blue_https_ingress.arn
+    type = "forward"
+  }
+  condition {
+    host_header {
+      values = [
+       "carloan2.dev.dpp.com"
+      ]
+    }
+  }
 }
 
 
