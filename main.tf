@@ -118,5 +118,44 @@ resource "aws_alb_listener_rule" "komiko" {
 }
 
 
+resource "aws_alb_listener_rule" "paprika" {
+  listener_arn = aws_alb_listener.https.arn
+  priority = 4
+
+  action {
+    order = 1
+    target_group_arn = aws_alb_target_group.blue_https_ingress.arn
+    type = "forward"
+  }
+  condition {
+    host_header {
+      values = [
+       "homeloan.dev.ddp.sbi.com"
+      ]
+    }
+  }
+}
+
+
+resource "aws_alb_listener_rule" "recipient" {
+  listener_arn = aws_alb_listener.https.arn
+  priority = 5
+
+  action {
+    order = 1
+    target_group_arn = aws_alb_target_group.blue_https_ingress.arn
+    type = "forward"
+  }
+
+  condition {
+    host_header {
+      values = [
+      "carloan.dev.ddp.com",
+        ]
+    }
+  }
+
+}
+
 
 
